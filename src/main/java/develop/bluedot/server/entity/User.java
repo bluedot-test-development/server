@@ -1,13 +1,15 @@
 package develop.bluedot.server.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -20,23 +22,16 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    //    @Enumerated(EnumType.STRING)
-    private String status;
-
-    private String password;
-
-    private String phoneNumber;
+    private Long userId;
 
     private String email;
 
-    private String account;
+    private String password;
 
-    @CreatedDate
-    private LocalDateTime createdAt;
+    private String genre;
 
-    @CreatedBy
-    private String createdBy;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Post> posts = new ArrayList<>();
+
 }
 

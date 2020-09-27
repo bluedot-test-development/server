@@ -41,9 +41,8 @@ public class UserService extends BaseService<UserApiRequest,UserApiResponse,User
         UserApiRequest userData = request.getData();
 
         User newUser = User.builder()
-                .account(userData.getAccount())
+                .email(userData.getAccount())
                 .password(userData.getPassword())
-                .phoneNumber("010404031414")
                 .build();
 
         User returnData = baseRepository.save(newUser);
@@ -63,20 +62,7 @@ public class UserService extends BaseService<UserApiRequest,UserApiResponse,User
 
     @Override
     public Header<UserApiResponse> update(Header<UserApiRequest> request) {
-
-        UserApiRequest userApiRequest = request.getData();
-
-        String enumString = UserStatus.REGISTERED.getDescription();
-
-        Optional<User> findUser = baseRepository.findById(userApiRequest.getId());
-
-        return findUser.map(user -> {
-            user.setId(userApiRequest.getId());
-            user.setStatus(enumString);
-            return user;
-        }).map(user -> baseRepository.save(user))
-                .map(user -> response(user))
-                .orElseGet(() -> Header.ERROR("에러"));
+        return null;
     }
 
     @Override
@@ -92,25 +78,14 @@ public class UserService extends BaseService<UserApiRequest,UserApiResponse,User
     }
 
     public UserApiResponse responseForPageable(User user){
-        UserApiResponse userApiResponse = UserApiResponse.builder()
-                .id(user.getId())
-                .account(user.getAccount())
-                .phoneNumber(user.getPhoneNumber())
-                .build();
-
-        return userApiResponse;
+        return null;
     }
 
     public Header<UserApiResponse> response(User user) {
 
-        UserStatus enumString = UserStatus.REGISTERED;
-
         UserApiResponse userApiResponse = UserApiResponse.builder()
-                .id(user.getId())
-                .status(enumString)
+                .userId(user.getUserId())
                 .password(user.getPassword())
-                .phoneNumber(user.getPhoneNumber())
-                .account(user.getAccount())
                 .build();
 
 
