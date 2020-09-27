@@ -21,7 +21,7 @@ import java.util.List;
 public class User {
 
     /**
-     * 회원가입 정보 : 이메일, 이름, 비밀번호, 장르 test
+     * 회원가입 정보 : 이메일, 이름, 비밀번호, 장르
      */
 
 
