@@ -1,7 +1,6 @@
 package develop.bluedot.server.service;
 
 import develop.bluedot.server.entity.User;
-import develop.bluedot.server.entity.enumclass.UserStatus;
 import develop.bluedot.server.network.Header;
 import develop.bluedot.server.network.Pagination;
 import develop.bluedot.server.network.request.UserApiRequest;
@@ -18,6 +17,26 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class UserService extends BaseService<UserApiRequest,UserApiResponse,User> {
+
+
+
+    /**
+     * 아이디 생성
+     */
+    @Override
+    public Header<UserApiResponse> create(Header<UserApiRequest> request) {
+        UserApiRequest userData = request.getData();
+
+        User newUser = User.builder()
+                .email(userData.getEmail())
+                .password(userData.getPassword())
+                .genre(userData.getGenre())
+                .build();
+
+        User returnData = baseRepository.save(newUser);
+
+        return response(returnData);
+    }
 
     public Header<List<UserApiResponse>> search(Pageable pageable){
         Page<User> users = baseRepository.findAll(pageable);
@@ -36,19 +55,6 @@ public class UserService extends BaseService<UserApiRequest,UserApiResponse,User
         return Header.OK(returnData,pagination);
     }
 
-    @Override
-    public Header<UserApiResponse> create(Header<UserApiRequest> request) {
-        UserApiRequest userData = request.getData();
-
-        User newUser = User.builder()
-                .email(userData.getAccount())
-                .password(userData.getPassword())
-                .build();
-
-        User returnData = baseRepository.save(newUser);
-
-        return response(returnData);
-    }
 
     @Override
     public Header<UserApiResponse> read(Long id) {
@@ -84,7 +90,7 @@ public class UserService extends BaseService<UserApiRequest,UserApiResponse,User
     public Header<UserApiResponse> response(User user) {
 
         UserApiResponse userApiResponse = UserApiResponse.builder()
-                .userId(user.getUserId())
+                .id(user.getId())
                 .password(user.getPassword())
                 .build();
 

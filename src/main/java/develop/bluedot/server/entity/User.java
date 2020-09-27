@@ -20,15 +20,24 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 public class User {
 
+    /**
+     * 회원가입 정보 : 이메일, 이름, 비밀번호, 장르
+     */
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    private Long id;
 
     private String email;
+
+    private String name;
 
     private String password;
 
     private String genre;
+
+
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList<>();
