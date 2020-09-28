@@ -25,9 +25,15 @@ public class User {
 
     private String email;
 
+    private String name;
+
     private String password;
 
-    private String genre;
+    private Integer genre;
+
+    private String img;
+
+    private Integer isArtist;
 
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "user")
     private List<Post> postList;

@@ -1,5 +1,6 @@
 package develop.bluedot.server.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -21,5 +22,6 @@ public class Relation {
     private int followingId;
 
     @ManyToOne
+    @JsonBackReference
     private User user;
 }
