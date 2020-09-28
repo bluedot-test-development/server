@@ -1,74 +1,30 @@
 package develop.bluedot.server.service;
 
-import develop.bluedot.server.application.EmailExistedException;
-import develop.bluedot.server.application.EmailNotExistedException;
-import develop.bluedot.server.application.PasswordWrongException;
+import develop.bluedot.server.entity.Post;
 import develop.bluedot.server.entity.User;
-import develop.bluedot.server.entity.repository.UserRepository;
+import develop.bluedot.server.entity.repository.PostRepository;
 import develop.bluedot.server.network.Header;
 import develop.bluedot.server.network.Pagination;
 import develop.bluedot.server.network.request.UserApiRequest;
+import develop.bluedot.server.network.response.PostApiResponse;
 import develop.bluedot.server.network.response.UserApiResponse;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-<<<<<<< Updated upstream
-import org.springframework.security.core.parameters.P;
-=======
->>>>>>> Stashed changes
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class UserService extends BaseService<UserApiRequest,UserApiResponse,User> {
 
-
-    private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
-
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
-
-    /**
-     * 아이디 생성
-     */
-    @Override
-    public Header<UserApiResponse> create(Header<UserApiRequest> request) {
-        UserApiRequest userData = request.getData();
-
-        //존재하는 이메일 예외처리
-        Optional<User> existed = userRepository.findByEmail(userData.getEmail());
-        if(existed.isPresent()){
-            throw new EmailExistedException(userData.getEmail());
-        }
-
-         String encodedPassword = passwordEncoder.encode(userData.getPassword());
-        log.info("" + encodedPassword);
-
-        User newUser = User.builder()
-                .email(userData.getEmail())
-                .password(encodedPassword)
-                .genre(userData.getGenre())
-                .name(userData.getName())
-                .build();
-
-        User returnData = baseRepository.save(newUser);
-
-        return response(returnData);
-    }
-
-
-
-    /**
-     * 페이징처리
+    private PostRepository postRepository;
 
     public Header<List<UserApiResponse>> search(Pageable pageable){
         Page<User> users = baseRepository.findAll(pageable);
@@ -86,8 +42,19 @@ public class UserService extends BaseService<UserApiRequest,UserApiResponse,User
 
         return Header.OK(returnData,pagination);
     }
-     */
 
+    @Override
+    public Header<UserApiResponse> create(Header<UserApiRequest> request) {
+        UserApiRequest userData = request.getData();
+
+        User newUser = User.builder()
+                .password(userData.getPassword())
+                .build();
+
+        User returnData = baseRepository.save(newUser);
+
+        return response(returnData);
+    }
 
     @Override
     public Header<UserApiResponse> read(Long id) {
@@ -116,20 +83,73 @@ public class UserService extends BaseService<UserApiRequest,UserApiResponse,User
 
     }
 
+    public List<UserApiResponse> getArtist(){
 
-//    인증
-    public User authenticate(String email, String password) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new EmailNotExistedException(email));
+        List<UserApiResponse> userApiResponsesList = new ArrayList<>();
 
+        List<User> findUsers= baseRepository.findAll();
 
-        //TODO : 패스워드 예외처리
-//        if(!passwordEncoder.matches(password, user.getPassword())){
-//            throw new PasswordWrongException();
-//        }
-        return user;
+        List<User> artistUser = findUsers.stream().filter(user->user.getIsArtist()==1).collect(Collectors.toList());
+
+        artistUser.stream().forEach(user->{
+            UserApiResponse userApiResponse = UserApiResponse.builder()
+                    .id(user.getId())
+                    .name(user.getName())
+                    .genre(user.getGenre())
+                    .img(user.getImg())
+                    .build();
+            userApiResponsesList.add(userApiResponse);
+        });
+
+        return userApiResponsesList;
     }
 
+    public List<PostApiResponse> getGenrePost(){
+
+        List<PostApiResponse> postList = new ArrayList<>();
+        List<Post> AllPosts = postRepository.findAll();
+
+        AllPosts.forEach(post->{
+            Optional<User> findUser = baseRepository.findById(post.getUser().getId());
+            Optional<User> filteredUser = findUser.filter(user-> user.getGenre()==1);
+
+            filteredUser.ifPresent(u->{
+                Optional<Post> findPost = postRepository.findByUserId(u.getId());
+                findPost.ifPresent(item->{
+                    PostApiResponse postApiResponse = PostApiResponse.builder()
+                            .userName(item.getUser().getName())
+                            .userGenre(item.getUser().getGenre())
+                            .userImg(item.getUser().getImg())
+                            .description(item.getDescription())
+                            .img(item.getImg())
+                            .title(item.getTitle())
+                            .build();
+                    postList.add(postApiResponse);
+                });
+            });
+        });
+        return postList;
+    }
+
+    public List<PostApiResponse> getAllPost(){
+        List<Post> postList = postRepository.findAll();
+        List<PostApiResponse> postApiResponseList = new ArrayList<>();
+
+        postList.forEach(item->{
+            PostApiResponse postApiResponse = PostApiResponse.builder()
+                    .userName(item.getUser().getName())
+                    .userGenre(item.getUser().getGenre())
+                    .userImg(item.getUser().getImg())
+                    .title(item.getTitle())
+                    .img(item.getImg())
+                    .description(item.getDescription())
+                    .build();
+            postApiResponseList.add(postApiResponse);
+        });
+
+
+        return postApiResponseList;
+    }
 
     public UserApiResponse responseForPageable(User user){
         return null;
@@ -138,16 +158,10 @@ public class UserService extends BaseService<UserApiRequest,UserApiResponse,User
     public Header<UserApiResponse> response(User user) {
 
         UserApiResponse userApiResponse = UserApiResponse.builder()
-                .id(user.getId())
-                .email(user.getEmail())
-                .password(user.getPassword())
-                .name(user.getName())
-                .genre(user.getGenre())
+//                .userId(user.getUserId())
                 .build();
 
 
         return Header.OK(userApiResponse);
     }
-
-
 }

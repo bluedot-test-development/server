@@ -1,10 +1,7 @@
 package develop.bluedot.server.entity;
 
-<<<<<<< Updated upstream
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-=======
-import com.fasterxml.jackson.annotation.JsonIgnore;
->>>>>>> Stashed changes
+
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -49,18 +46,6 @@ public class User {
     @JsonManagedReference
     private List<DotVideo> dotVideoList;
 
-<<<<<<< HEAD
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-<<<<<<< Updated upstream
-    private List<Post> posts = new ArrayList<>();
-=======
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "user")
-    private List<Relation> relationList;
->>>>>>> 209e400353a4cfb7969f2507bf40841d6de5b4b6
-=======
-    private List<Post> posts;
->>>>>>> Stashed changes
 
 }
 

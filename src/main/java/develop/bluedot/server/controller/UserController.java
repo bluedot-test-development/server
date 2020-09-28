@@ -33,7 +33,6 @@ public class UserController extends CrudController<UserApiRequest, UserApiRespon
         return null;
     }
 
-<<<<<<< Updated upstream
     @GetMapping("/artist")
     public List<UserApiResponse> getArtist(){
         return userService.getArtist();
@@ -48,8 +47,5 @@ public class UserController extends CrudController<UserApiRequest, UserApiRespon
     public List<PostApiResponse> getAllPost(){
         return userService.getAllPost();
     }
-=======
-
->>>>>>> Stashed changes
 
 }
