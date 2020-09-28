@@ -22,6 +22,6 @@ public class UserApiRequest {
 
     private String password;
 
-    private String genre;
+    private Integer genre;
 
 }
