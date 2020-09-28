@@ -11,11 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -38,14 +39,23 @@ public class UserController extends CrudController<UserApiRequest, UserApiRespon
         return userService.getArtist();
     }
 
-    @GetMapping("genre")
+    @GetMapping("/genre")
     public List<PostApiResponse> getGenrePost(){
         return userService.getGenrePost();
     }
 
-    @GetMapping("post")
+    @GetMapping("/post")
     public List<PostApiResponse> getAllPost(){
         return userService.getAllPost();
+    }
+
+    @GetMapping("/profile")
+    public Optional<Object> getUserProfile(){
+        return userService.getUserProfile();
+    }
+    @GetMapping("/banner")
+    public Optional<Object> getBannerImg(){
+        return userService.getBannerImg();
     }
 
 }

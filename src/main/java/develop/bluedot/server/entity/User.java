@@ -39,13 +39,24 @@ public class User {
 
     private Integer isArtist;
 
+    private Integer followingCount;
+
+    private Integer followedCount;
+
+    private String bannerImg;
+
+
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "user")
+    @JsonManagedReference
     private List<Post> postList;
 
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "user")
     @JsonManagedReference
     private List<DotVideo> dotVideoList;
 
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "user")
+    @JsonManagedReference
+    private List<DotVideo> relationList;
 
 }
 

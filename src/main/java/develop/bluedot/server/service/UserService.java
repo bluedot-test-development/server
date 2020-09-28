@@ -7,14 +7,11 @@ import develop.bluedot.server.entity.User;
 import develop.bluedot.server.entity.repository.PostRepository;
 import develop.bluedot.server.entity.repository.UserRepository;
 import develop.bluedot.server.network.Header;
-import develop.bluedot.server.network.Pagination;
 import develop.bluedot.server.network.request.UserApiRequest;
 import develop.bluedot.server.network.response.PostApiResponse;
 import develop.bluedot.server.network.response.UserApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -176,9 +173,38 @@ public class UserService extends BaseService<UserApiRequest,UserApiResponse,User
                     .build();
             postApiResponseList.add(postApiResponse);
         });
-
-
         return postApiResponseList;
+    }
+
+    public Optional<Object> getUserProfile(){
+        Optional<User> findUser = userRepository.findById(14L);
+
+        return findUser.map(user->{
+            UserApiResponse userApiResponse = UserApiResponse.builder()
+                    .id(user.getId())
+                    .email(user.getEmail())
+                    .name(user.getName())
+                    .genre(user.getGenre())
+                    .followedCount(user.getFollowedCount())
+                    .followingCount(user.getFollowingCount())
+                    .isArtist(user.getIsArtist())
+                    .img(user.getImg())
+                    .bannerImg(user.getBannerImg())
+                    .build();
+            return userApiResponse;
+        });
+    }
+
+    public Optional<Object> getBannerImg(){
+        Optional<User> findUser = userRepository.findById(14L);
+
+        return findUser.map(user->{
+                    UserApiResponse userApiResponse = UserApiResponse.builder()
+                            .bannerImg(user.getBannerImg())
+                            .build();
+                    return userApiResponse;
+                }
+        );
     }
 
 

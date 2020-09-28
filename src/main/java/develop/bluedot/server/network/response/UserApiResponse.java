@@ -25,5 +25,13 @@ public class UserApiResponse {
 
     private String img;
 
+    private Integer followingCount;
+
+    private Integer followedCount;
+
+    private Integer isArtist;
+
+    private String bannerImg;
+
 
 }
