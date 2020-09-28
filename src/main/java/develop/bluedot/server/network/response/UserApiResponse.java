@@ -32,4 +32,5 @@ public class UserApiResponse {
 
     private String genre;
 
+
 }
