@@ -21,18 +21,18 @@ public class JwtUtilTest {
 
     @Test
     public void createToken(){
-        String token = jwtUtil.createToken(55L,"jon2g");
+        String token = jwtUtil.createToken(39L,"test");
 
         assertThat(token,containsString("."));
     }
-//
+
     @Test
     public void getClaims(){
-        String token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjU1LCJuYW1lIjoiam9uMmcifQ.GN86nyRsRlJX4REtTMlbp1GSZFEngTn0lfvKp2W2XVE";
+        String token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjM4LCJuYW1lIjoidGVzdCJ9.XbqtJ3z_d6_JW3X4f-L_oX0PT_Ni9wPLk8sSsa3FU_s";
         Claims claims =jwtUtil.getClaims(token);
 
-        assertThat(claims.get("userId",Long.class),is(55L));
-        assertThat(claims.get("name"),is("jon2g"));
+        assertThat(claims.get("userId",Long.class),is(38));
+        assertThat(claims.get("name"),is("test"));
     }
 
 

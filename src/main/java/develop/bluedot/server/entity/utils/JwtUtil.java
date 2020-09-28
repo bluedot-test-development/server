@@ -5,11 +5,9 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import lombok.extern.slf4j.Slf4j;
 
 import java.security.Key;
 
-@Slf4j
 public class JwtUtil {
 
     private Key key;
@@ -21,12 +19,14 @@ public class JwtUtil {
 //   토큰생성
     public String createToken(long userId, String name){
 
-
-        return Jwts.builder()
+        String token = Jwts.builder()
                 .claim("userId", userId)
                 .claim("name", name)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
+
+
+        return token;
 
 
 //        JwtBuilder builder = Jwts.builder()
@@ -37,16 +37,14 @@ public class JwtUtil {
 //                .signWith(key, SignatureAlgorithm.HS256)
 //                .compact();
 //
+////        return "header.payload.signature";
     }
 
 
     public Claims getClaims(String token){
-        log.info(""+ token);
         return Jwts.parser()
                 .setSigningKey(key)
                 .parseClaimsJws(token)
                 .getBody();
-
-
     }
 }

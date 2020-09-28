@@ -204,19 +204,14 @@ public class UserService extends BaseService<UserApiRequest,UserApiResponse,User
         return user;
     }
 
-//    public UserApiResponse responseForPageable(User user){
-//        return null;
-//    }
+    public UserApiResponse responseForPageable(User user){
+        return null;
+    }
 
     public Header<UserApiResponse> response(User user) {
 
         UserApiResponse userApiResponse = UserApiResponse.builder()
-                .id(user.getId())
-                .email(user.getEmail())
-                .name(user.getName())
-                .password(user.getPassword())
-                .genre(user.getGenre())
-                .img(user.getImg())
+//                .userId(user.getUserId())
                 .build();
 
 

@@ -21,8 +21,6 @@ public class UserApiResponse {
 
     private String name;
 
-    private String password;
-
     private Integer genre;
 
     private String img;
