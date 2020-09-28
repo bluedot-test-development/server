@@ -3,6 +3,7 @@ package develop.bluedot.server.controller;
 import develop.bluedot.server.entity.User;
 import develop.bluedot.server.network.Header;
 import develop.bluedot.server.network.request.UserApiRequest;
+import develop.bluedot.server.network.response.PostApiResponse;
 import develop.bluedot.server.network.response.UserApiResponse;
 import develop.bluedot.server.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -28,4 +29,20 @@ public class UserController extends CrudController<UserApiRequest, UserApiRespon
     public Header<List<UserApiResponse>> search(@PageableDefault(sort="id",direction = Sort.Direction.ASC,size=10) Pageable pageable){
         return userService.search(pageable);
     }
+
+    @GetMapping("/artist")
+    public List<UserApiResponse> getArtist(){
+        return userService.getArtist();
+    }
+
+    @GetMapping("genre")
+    public List<PostApiResponse> getGenrePost(){
+        return userService.getGenrePost();
+    }
+
+    @GetMapping("post")
+    public List<PostApiResponse> getAllPost(){
+        return userService.getAllPost();
+    }
+
 }

@@ -15,8 +15,21 @@ import javax.persistence.EntityListeners;
 @EntityListeners(AuditingEntityListener.class)
 public class UserApiResponse {
 
-    private Long userId;
+    private Long id;
+<<<<<<< HEAD
 
-    private String password;
+    private String email;
+
+    private String name;
+=======
+>>>>>>> 209e400353a4cfb7969f2507bf40841d6de5b4b6
+
+    private Integer genre;
+
+    private String name;
+
+    private String img;
+
+    private String genre;
 
 }

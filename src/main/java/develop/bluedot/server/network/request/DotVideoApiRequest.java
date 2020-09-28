@@ -9,21 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserApiRequest {
-
-
-    private Long id;
-
-    private String email;
-
-    private Long userId;
-
-
-    private String name;
-
+public class DotVideoApiRequest {
 
     private String password;
-
-    private String genre;
 
 }

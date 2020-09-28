@@ -1,27 +1,25 @@
 package develop.bluedot.server.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
-@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Accessors(chain = true)
 @ToString(exclude = {"user"})
-public class Post {
+public class Relation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String description;
-
-    private String img;
-
-    private String title;
+    private int followingId;
 
     @ManyToOne
     @JsonBackReference

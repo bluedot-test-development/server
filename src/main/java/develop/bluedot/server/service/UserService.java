@@ -1,23 +1,72 @@
 package develop.bluedot.server.service;
 
+import develop.bluedot.server.application.EmailExistedException;
+import develop.bluedot.server.application.EmailNotExistedException;
+import develop.bluedot.server.application.PasswordWrongException;
 import develop.bluedot.server.entity.User;
-import develop.bluedot.server.entity.enumclass.UserStatus;
+import develop.bluedot.server.entity.repository.UserRepository;
 import develop.bluedot.server.network.Header;
 import develop.bluedot.server.network.Pagination;
 import develop.bluedot.server.network.request.UserApiRequest;
 import develop.bluedot.server.network.response.UserApiResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.parameters.P;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class UserService extends BaseService<UserApiRequest,UserApiResponse,User> {
+
+
+    private UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    /**
+     * 아이디 생성
+     */
+    @Override
+    public Header<UserApiResponse> create(Header<UserApiRequest> request) {
+        UserApiRequest userData = request.getData();
+
+        //존재하는 이메일 예외처리
+        Optional<User> existed = userRepository.findByEmail(userData.getEmail());
+        if(existed.isPresent()){
+            throw new EmailExistedException(userData.getEmail());
+        }
+
+         String encodedPassword = passwordEncoder.encode(userData.getPassword());
+        log.info("" + encodedPassword);
+
+        User newUser = User.builder()
+                .email(userData.getEmail())
+                .password(encodedPassword)
+                .genre(userData.getGenre())
+                .name(userData.getName())
+                .build();
+
+        User returnData = baseRepository.save(newUser);
+
+        return response(returnData);
+    }
+
+
+
+    /**
+     * 페이징처리
 
     public Header<List<UserApiResponse>> search(Pageable pageable){
         Page<User> users = baseRepository.findAll(pageable);
@@ -35,20 +84,8 @@ public class UserService extends BaseService<UserApiRequest,UserApiResponse,User
 
         return Header.OK(returnData,pagination);
     }
+     */
 
-    @Override
-    public Header<UserApiResponse> create(Header<UserApiRequest> request) {
-        UserApiRequest userData = request.getData();
-
-        User newUser = User.builder()
-                .email(userData.getAccount())
-                .password(userData.getPassword())
-                .build();
-
-        User returnData = baseRepository.save(newUser);
-
-        return response(returnData);
-    }
 
     @Override
     public Header<UserApiResponse> read(Long id) {
@@ -77,6 +114,21 @@ public class UserService extends BaseService<UserApiRequest,UserApiResponse,User
 
     }
 
+
+//    인증
+    public User authenticate(String email, String password) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new EmailNotExistedException(email));
+
+
+        //TODO : 패스워드 예외처리
+//        if(!passwordEncoder.matches(password, user.getPassword())){
+//            throw new PasswordWrongException();
+//        }
+        return user;
+    }
+
+
     public UserApiResponse responseForPageable(User user){
         return null;
     }
@@ -84,11 +136,16 @@ public class UserService extends BaseService<UserApiRequest,UserApiResponse,User
     public Header<UserApiResponse> response(User user) {
 
         UserApiResponse userApiResponse = UserApiResponse.builder()
-                .userId(user.getUserId())
+                .id(user.getId())
+                .email(user.getEmail())
                 .password(user.getPassword())
+                .name(user.getName())
+                .genre(user.getGenre())
                 .build();
 
 
         return Header.OK(userApiResponse);
     }
+
+
 }

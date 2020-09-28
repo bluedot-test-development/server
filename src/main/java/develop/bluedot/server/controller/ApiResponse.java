@@ -7,16 +7,16 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 @Data
-public class ApiResponse<T> {
+public class ApiResponse<B,T> {
 
-    public static ApiResponse<String> OK = new ApiResponse<>("", "", "OK");
+    public static ApiResponse<Integer,String> OK = new ApiResponse<>(200, "", "OK");
 
-    private String code;
+    private int code;
     private String message;
     private T data;
 
-    static <T> ApiResponse<T> of(T data) {
-        return new ApiResponse<>("", "", data);
+    static <B,T> ApiResponse<B,T> of(T data) {
+        return new ApiResponse<>(200, "upload 성공", data);
     }
 
 }
