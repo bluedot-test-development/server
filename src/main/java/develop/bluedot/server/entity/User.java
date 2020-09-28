@@ -1,28 +1,27 @@
 package develop.bluedot.server.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
 @EntityListeners(AuditingEntityListener.class)
+@ToString(exclude = {"postList","dotVideoList","relationList"})
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope=User.class)
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    private Long id;
 
     private String email;
 
@@ -30,8 +29,15 @@ public class User {
 
     private String genre;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Post> posts = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "user")
+    private List<Post> postList;
+
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "user")
+    @JsonManagedReference
+    private List<DotVideo> dotVideoList;
+
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "user")
+    private List<Relation> relationList;
 
 }
 

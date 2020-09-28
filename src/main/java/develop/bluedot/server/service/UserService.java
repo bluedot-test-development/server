@@ -1,7 +1,6 @@
 package develop.bluedot.server.service;
 
 import develop.bluedot.server.entity.User;
-import develop.bluedot.server.entity.enumclass.UserStatus;
 import develop.bluedot.server.network.Header;
 import develop.bluedot.server.network.Pagination;
 import develop.bluedot.server.network.request.UserApiRequest;
@@ -41,7 +40,6 @@ public class UserService extends BaseService<UserApiRequest,UserApiResponse,User
         UserApiRequest userData = request.getData();
 
         User newUser = User.builder()
-                .email(userData.getAccount())
                 .password(userData.getPassword())
                 .build();
 
@@ -84,7 +82,7 @@ public class UserService extends BaseService<UserApiRequest,UserApiResponse,User
     public Header<UserApiResponse> response(User user) {
 
         UserApiResponse userApiResponse = UserApiResponse.builder()
-                .userId(user.getUserId())
+//                .userId(user.getUserId())
                 .password(user.getPassword())
                 .build();
 
