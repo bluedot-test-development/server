@@ -1,8 +1,8 @@
 package develop.bluedot.server.controller;
 
 
-import develop.bluedot.server.application.SessionRequestDto;
-import develop.bluedot.server.application.SessionResponseDto;
+import develop.bluedot.server.network.request.SessionApiRequest;
+import develop.bluedot.server.network.response.SessionApiResponse;
 import develop.bluedot.server.entity.User;
 import develop.bluedot.server.entity.utils.JwtUtil;
 import develop.bluedot.server.service.UserService;
@@ -27,8 +27,8 @@ public class SessionController {
     private UserService userService;
 
     @PostMapping("/session")
-    public ResponseEntity<SessionResponseDto> create(
-            @RequestBody SessionRequestDto resource
+    public ResponseEntity<SessionApiResponse> create(
+            @RequestBody SessionApiRequest resource
     ) throws URISyntaxException {
 
 
@@ -42,7 +42,7 @@ public class SessionController {
         String url = "/session";
 
         return ResponseEntity.created(new URI(url)).body(
-                SessionResponseDto.builder()
+                SessionApiResponse.builder()
                 .accessToken(accessToken)
                 .build());
     }

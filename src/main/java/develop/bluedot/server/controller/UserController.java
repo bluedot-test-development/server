@@ -25,25 +25,27 @@ public class UserController extends CrudController<UserApiRequest, UserApiRespon
     @Autowired
     private UserService userService;
 
+    /**
+     * 페이징
     @GetMapping("/page")
     public Header<List<UserApiResponse>> search(
             @PageableDefault(sort="id",direction = Sort.Direction.ASC,size=10)
                     Pageable pageable){
-//        return userService.search(pageable);
-        return null;
+        return userService.search(pageable);
     }
+*/
 
     @GetMapping("/artist")
     public List<UserApiResponse> getArtist(){
         return userService.getArtist();
     }
 
-    @GetMapping("genre")
+    @GetMapping("/genre")
     public List<PostApiResponse> getGenrePost(){
         return userService.getGenrePost();
     }
 
-    @GetMapping("post")
+    @GetMapping("/post")
     public List<PostApiResponse> getAllPost(){
         return userService.getAllPost();
     }

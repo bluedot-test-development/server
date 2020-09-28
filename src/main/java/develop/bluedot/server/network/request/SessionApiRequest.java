@@ -1,9 +1,9 @@
-package develop.bluedot.server.application;
+package develop.bluedot.server.network.request;
 
 import lombok.Data;
 
 @Data
-public class SessionRequestDto {
+public class SessionApiRequest {
 
     private String email;
     private String password;

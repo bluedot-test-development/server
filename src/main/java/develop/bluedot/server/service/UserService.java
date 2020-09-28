@@ -113,6 +113,9 @@ public class UserService extends BaseService<UserApiRequest,UserApiResponse,User
 
     }
 
+    /**
+     * 아티스트 정보 가져오기
+     */
     public List<UserApiResponse> getArtist(){
 
         List<UserApiResponse> userApiResponsesList = new ArrayList<>();
@@ -134,6 +137,9 @@ public class UserService extends BaseService<UserApiRequest,UserApiResponse,User
         return userApiResponsesList;
     }
 
+    /**
+     * 장르별 아티스트 게시물 가져오기
+     */
     public List<PostApiResponse> getGenrePost(){
 
         List<PostApiResponse> postList = new ArrayList<>();
@@ -161,6 +167,9 @@ public class UserService extends BaseService<UserApiRequest,UserApiResponse,User
         return postList;
     }
 
+    /**
+     * 장르별 아티스트 게시물 가져오기
+     */
     public List<PostApiResponse> getAllPost(){
         List<Post> postList = postRepository.findAll();
         List<PostApiResponse> postApiResponseList = new ArrayList<>();
@@ -182,7 +191,9 @@ public class UserService extends BaseService<UserApiRequest,UserApiResponse,User
     }
 
 
-    //    인증
+    /**
+     * 인증
+     */
     public User authenticate(String email, String password) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new EmailNotExistedException(email));
