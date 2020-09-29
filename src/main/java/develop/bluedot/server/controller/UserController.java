@@ -1,23 +1,21 @@
 package develop.bluedot.server.controller;
 
 import develop.bluedot.server.entity.User;
+import develop.bluedot.server.network.Header;
 import develop.bluedot.server.network.request.UserApiRequest;
 import develop.bluedot.server.network.response.PostApiResponse;
 import develop.bluedot.server.network.response.UserApiResponse;
 import develop.bluedot.server.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Slf4j
 @RestController
 @RequestMapping("/user")
-public class UserController extends CrudController<UserApiRequest, UserApiResponse, User>
-{
+public class UserController extends CrudController<UserApiRequest, UserApiResponse, User> {
     @Autowired
     private UserService userService;
 

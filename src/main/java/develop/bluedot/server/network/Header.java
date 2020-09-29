@@ -46,7 +46,7 @@ public class Header<T> {
                 .resultCode("OK")
                 .description("성공")
                 .data(data)
-                .pagination(pagination)
+//                .pagination(pagination)
                 .build();
     }
     public static <T> Header<T> ERROR(String description){

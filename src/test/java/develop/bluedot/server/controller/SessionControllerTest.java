@@ -4,7 +4,7 @@ import develop.bluedot.server.application.EmailNotExistedException;
 import develop.bluedot.server.application.PasswordWrongException;
 import develop.bluedot.server.entity.User;
 import develop.bluedot.server.entity.utils.JwtUtil;
-import develop.bluedot.server.service.UserService;
+import develop.bluedot.server.service.SessionService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.core.StringContains.containsString;
-import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -32,7 +31,7 @@ public class SessionControllerTest {
     private JwtUtil jwtUtil;
 
     @MockBean
-    private UserService userService;
+    private SessionService sessionService;
 
 
     @Test
@@ -47,7 +46,7 @@ public class SessionControllerTest {
         //when
         User mockUser = User.builder().id(id).name(name).build();
 
-        given(userService.authenticate(email, password)).willReturn(mockUser);
+        given(sessionService.authenticate(email, password)).willReturn(mockUser);
 
         given(jwtUtil.createToken(id, name))
                 .willReturn("header.payload.signature");
@@ -60,7 +59,7 @@ public class SessionControllerTest {
                 .andExpect(header().string("location", "/session"))
                 .andExpect(content().string(containsString("{\"accessToken\":\"header.payload.signature\"}")));
 
-        verify(userService).authenticate(eq(email), eq(password));
+        verify(sessionService).authenticate(eq(email), eq(password));
      }
 
 
@@ -68,7 +67,7 @@ public class SessionControllerTest {
     @Test
     public void createWithNotExistedEmail() throws Exception {
 
-        given(userService.authenticate("x@example.com", "test"))
+        given(sessionService.authenticate("x@example.com", "test"))
                 .willThrow(EmailNotExistedException.class);
 
         mvc.perform(post("/session")
@@ -76,14 +75,14 @@ public class SessionControllerTest {
                 .content("{\"email\":\"x@example.com\",\"password\":\"test\"}"))
                 .andExpect(status().isBadRequest());
 
-        verify(userService).authenticate(eq("x@example.com"), eq("test"));
+        verify(sessionService).authenticate(eq("x@example.com"), eq("test"));
     }
 
     //SessionErrorAdvice Test
     @Test
     public void createWithWrongPassword() throws Exception {
 
-        given(userService.authenticate("tester@example.com", "x"))
+        given(sessionService.authenticate("tester@example.com", "x"))
                 .willThrow(PasswordWrongException.class);
 
         mvc.perform(post("/session")
@@ -91,7 +90,7 @@ public class SessionControllerTest {
                 .content("{\"email\":\"tester@example.com\",\"password\":\"x\"}"))
                 .andExpect(status().isBadRequest());
 
-        verify(userService).authenticate(eq("tester@example.com"), eq("x"));
+        verify(sessionService).authenticate(eq("tester@example.com"), eq("x"));
     }
 
 }

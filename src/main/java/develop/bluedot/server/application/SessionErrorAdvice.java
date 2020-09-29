@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class SessionErrorAdvice {
 
     /**
-     * 로그인 세션 : 이메일이 존재하지 않을 때 예외처
+     * 로그인 세션 : 이메일이 존재하지 않을 때 예외처리
      */
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)

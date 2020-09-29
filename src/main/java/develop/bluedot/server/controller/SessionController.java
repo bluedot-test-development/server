@@ -5,7 +5,7 @@ import develop.bluedot.server.network.request.SessionApiRequest;
 import develop.bluedot.server.network.response.SessionApiResponse;
 import develop.bluedot.server.entity.User;
 import develop.bluedot.server.entity.utils.JwtUtil;
-import develop.bluedot.server.service.UserService;
+import develop.bluedot.server.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,7 +24,7 @@ public class SessionController {
     private JwtUtil jwtUtil;
 
     @Autowired
-    private UserService userService;
+    private SessionService sessionService;
 
     @PostMapping("/session")
     public ResponseEntity<SessionApiResponse> create(
@@ -35,7 +35,7 @@ public class SessionController {
         String email = resource.getEmail();
         String password = resource.getPassword();
 
-        User user = userService.authenticate(email,password);
+        User user = sessionService.authenticate(email,password);
 
         String accessToken = jwtUtil.createToken(user.getId(),user.getName());
 

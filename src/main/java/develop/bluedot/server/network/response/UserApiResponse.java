@@ -25,6 +25,8 @@ public class UserApiResponse {
 
     private Integer genre;
 
+    private Integer isArtist;
+
     private String img;
 
 

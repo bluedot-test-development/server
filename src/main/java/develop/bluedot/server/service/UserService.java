@@ -40,18 +40,20 @@ public class UserService extends BaseService<UserApiRequest,UserApiResponse,User
     }
 
     /**
-     * 아이디 생성
+     * 회원가입 register User
      */
     @Override
     public Header<UserApiResponse> create(Header<UserApiRequest> request) {
         UserApiRequest userData = request.getData();
 
-        //존재하는 이메일 예외처리
         Optional<User> existed = userRepository.findByEmail(userData.getEmail());
+
+        //존재하는 이메일 예외처리
         if(existed.isPresent()){
             throw new EmailExistedException(userData.getEmail());
         }
 
+        //TODO : salt값 추가하기
         String encodedPassword = passwordEncoder.encode(userData.getPassword());
 
         User newUser = User.builder()
@@ -59,12 +61,16 @@ public class UserService extends BaseService<UserApiRequest,UserApiResponse,User
                 .password(encodedPassword)
                 .genre(userData.getGenre())
                 .name(userData.getName())
+                .isArtist(userData.getIsArtist())
+                .img(userData.getImg())
                 .build();
 
         User returnData = baseRepository.save(newUser);
 
         return response(returnData);
     }
+
+
 
     /**
      * 페이징처리
@@ -85,6 +91,7 @@ public class UserService extends BaseService<UserApiRequest,UserApiResponse,User
         return Header.OK(returnData,pagination);
     }
      */
+
 
     @Override
     public Header<UserApiResponse> read(Long id) {
@@ -191,23 +198,6 @@ public class UserService extends BaseService<UserApiRequest,UserApiResponse,User
     }
 
 
-    /**
-     * 인증
-     */
-    public User authenticate(String email, String password) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new EmailNotExistedException(email));
-        //TODO : 패스워드 예외처리
-//        if(!passwordEncoder.matches(password, user.getPassword())){
-//            throw new PasswordWrongException();
-//        }
-        return user;
-    }
-
-//    public UserApiResponse responseForPageable(User user){
-//        return null;
-//    }
-
     public Header<UserApiResponse> response(User user) {
 
         UserApiResponse userApiResponse = UserApiResponse.builder()
@@ -216,6 +206,7 @@ public class UserService extends BaseService<UserApiRequest,UserApiResponse,User
                 .name(user.getName())
                 .password(user.getPassword())
                 .genre(user.getGenre())
+                .isArtist(user.getIsArtist())
                 .img(user.getImg())
                 .build();
 

@@ -10,7 +10,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Getter
+@Getter @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

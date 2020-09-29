@@ -16,12 +16,16 @@ public class UserApiRequest {
 
     private String email;
 
-    private Long userId;
-
     private String name;
 
     private String password;
 
     private Integer genre;
+
+    private Integer isArtist;
+
+    private String img;
+
+
 
 }
