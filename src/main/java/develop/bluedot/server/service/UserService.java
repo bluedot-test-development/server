@@ -53,7 +53,6 @@ public class UserService extends BaseService<UserApiRequest,UserApiResponse,User
             throw new EmailExistedException(userData.getEmail());
         }
 
-        //TODO : salt값 추가하기
         String encodedPassword = passwordEncoder.encode(userData.getPassword());
 
         User newUser = User.builder()

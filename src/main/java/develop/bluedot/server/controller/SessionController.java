@@ -26,6 +26,8 @@ public class SessionController {
     @Autowired
     private SessionService sessionService;
 
+
+    //TODO : 반환값 token으로 변경 (created url해도 되나?)
     @PostMapping("/session")
     public ResponseEntity<SessionApiResponse> create(
             @RequestBody SessionApiRequest resource
@@ -40,6 +42,7 @@ public class SessionController {
         String accessToken = jwtUtil.createToken(user.getId(),user.getName());
 
         String url = "/session";
+
 
         return ResponseEntity.created(new URI(url)).body(
                 SessionApiResponse.builder()

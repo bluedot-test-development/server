@@ -26,6 +26,11 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         Filter filter = new JwtAuthenticationFilter(authenticationManager(), jwtUtil());
+
+        /**
+         * filter -> BasicAuthentication 사용
+         * 현재 stateless 상태 (요청받을때마다 AccessToken 제공)
+         */
         http
                 .cors().disable()
                 .csrf().disable()
@@ -34,7 +39,7 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilter(filter)
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS); // stateless상태
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Bean

@@ -20,14 +20,21 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
 
     private JwtUtil jwtUtil;
 
+    /**
+     * jwt -> SecurityJavaConfig로 보냄
+     */
     public JwtAuthenticationFilter(
             AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
         super(authenticationManager);
         this.jwtUtil = jwtUtil;
     }
 
-    //TODO : 실제로 jwt 분석 필요함
 
+    /**
+     * getAuthentication ->  토큰 여부 확인  -> 내부토큰(UsrnamePasswordA~Token)사용하여 사용자정보 확인
+     * getAuthentication에서 토큰 값이 존재하면 contextHolder로 context 세팅
+     * chain.doFilter
+     */
 
     @Override
     protected void doFilterInternal(
@@ -51,7 +58,6 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
             return null;
         }
 
-        //jwtutil에서 claims얻기
         Claims claims = jwtUtil.getClaims(token.substring("Bearer ".length()));
 
         Authentication authentication =
