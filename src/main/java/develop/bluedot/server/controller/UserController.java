@@ -43,6 +43,7 @@ public class UserController extends CrudController<UserApiRequest, UserApiRespon
 
     @GetMapping("/genre")
     public List<PostApiResponse> getGenrePost(){
+        int changetest;
         return userService.getGenrePost();
     }
 
