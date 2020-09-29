@@ -1,4 +1,4 @@
-package develop.bluedot.server.application;
+package develop.bluedot.server.application.exception;
 
 
 public class PasswordWrongException extends RuntimeException {

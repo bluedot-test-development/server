@@ -1,7 +1,7 @@
 package develop.bluedot.server.service;
 
-import develop.bluedot.server.application.EmailNotExistedException;
-import develop.bluedot.server.application.PasswordWrongException;
+import develop.bluedot.server.application.exception.EmailNotExistedException;
+import develop.bluedot.server.application.exception.PasswordWrongException;
 import develop.bluedot.server.entity.User;
 import develop.bluedot.server.entity.repository.UserRepository;
 import org.junit.Before;
@@ -18,9 +18,9 @@ import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
-public class SessionServiceTest {
+public class UserServiceTest {
 
-    private SessionService sessionService;
+    private UserService userService;
 
     @Mock
     private UserRepository userRepository;
@@ -33,7 +33,7 @@ public class SessionServiceTest {
     public void setup(){
         MockitoAnnotations.initMocks(this);
 
-        sessionService = new SessionService(userRepository, passwordEncoder);
+        userService = new UserService(userRepository, passwordEncoder);
     }
 
 
@@ -53,7 +53,7 @@ public class SessionServiceTest {
 
         given(passwordEncoder.matches(any(),any())).willReturn(true);
 
-        User user = sessionService.authenticate(email, password);
+        User user = userService.authenticate(email, password);
 
         assertThat(user.getEmail(),is(email));
     }
@@ -70,7 +70,7 @@ public class SessionServiceTest {
 
 
         assertThatThrownBy(() -> {
-            sessionService.authenticate(email,password);
+            userService.authenticate(email,password);
         }).isInstanceOf(EmailNotExistedException.class);
 
     }
@@ -89,7 +89,7 @@ public class SessionServiceTest {
         given(passwordEncoder.matches(any(), any())).willReturn(false);
 
         assertThatThrownBy(() -> {
-            sessionService.authenticate(email, password);
+            userService.authenticate(email, password);
         }).isInstanceOf(PasswordWrongException.class);
     }
 }

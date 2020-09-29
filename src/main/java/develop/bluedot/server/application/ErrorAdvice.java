@@ -1,5 +1,8 @@
 package develop.bluedot.server.application;
 
+import develop.bluedot.server.application.exception.EmailExistedException;
+import develop.bluedot.server.application.exception.EmailNotExistedException;
+import develop.bluedot.server.application.exception.PasswordWrongException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -7,7 +10,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
-public class SessionErrorAdvice {
+public class ErrorAdvice {
+
+    /**
+     * 회원가입 : 이메일이 이미 존재할 때 예외처리
+     */
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(EmailExistedException.class)
+    public String handelEmailExisted(){
+        return "{}";
+    }
 
     /**
      * 로그인 세션 : 이메일이 존재하지 않을 때 예외처리
@@ -30,5 +43,7 @@ public class SessionErrorAdvice {
     public String handlePasswordWrong(){
         return "{}";
     }
+
+
 
 }

@@ -1,4 +1,4 @@
-package develop.bluedot.server.application;
+package develop.bluedot.server.application.exception;
 
 public class EmailExistedException extends RuntimeException {
     public EmailExistedException(String email){
