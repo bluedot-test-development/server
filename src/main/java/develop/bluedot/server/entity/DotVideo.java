@@ -24,6 +24,8 @@ public class DotVideo {
 
     private int likes;
 
+    private String thumbnail;
+
     private int comments;
 
     @ManyToOne

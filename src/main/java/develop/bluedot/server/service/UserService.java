@@ -176,23 +176,31 @@ public class UserService extends BaseService<UserApiRequest,UserApiResponse,User
         return postApiResponseList;
     }
 
-    public Optional<Object> getUserProfile(){
+    public User getUserProfile(){
         Optional<User> findUser = userRepository.findById(14L);
 
-        return findUser.map(user->{
-            UserApiResponse userApiResponse = UserApiResponse.builder()
-                    .id(user.getId())
-                    .email(user.getEmail())
-                    .name(user.getName())
-                    .genre(user.getGenre())
-                    .followedCount(user.getFollowedCount())
-                    .followingCount(user.getFollowingCount())
-                    .isArtist(user.getIsArtist())
-                    .img(user.getImg())
-                    .bannerImg(user.getBannerImg())
-                    .build();
-            return userApiResponse;
-        });
+        if(findUser.isPresent()){
+            return findUser.get();
+        }else{
+            return null;
+        }
+
+        // findUser.orElse()
+
+//        return findUser.map(user->{
+//            UserApiResponse userApiResponse = UserApiResponse.builder()
+//                    .id(user.getId())
+//                    .email(user.getEmail())
+//                    .name(user.getName())
+//                    .genre(user.getGenre())
+//                    .followedCount(user.getFollowedCount())
+//                    .followingCount(user.getFollowingCount())
+//                    .isArtist(user.getIsArtist())
+//                    .img(user.getImg())
+//                    .bannerImg(user.getBannerImg())
+//                    .build();
+//            return userApiResponse;
+//        });
     }
 
     public Optional<Object> getBannerImg(){
