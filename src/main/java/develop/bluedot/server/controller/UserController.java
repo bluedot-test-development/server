@@ -50,7 +50,7 @@ public class UserController extends CrudController<UserApiRequest, UserApiRespon
     }
 
     @GetMapping("/profile")
-    public Optional<Object> getUserProfile(){
+    public User getUserProfile(){
         return userService.getUserProfile();
     }
     @GetMapping("/banner")
