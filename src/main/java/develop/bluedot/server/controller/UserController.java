@@ -26,6 +26,8 @@ public class UserController extends CrudController<UserApiRequest, UserApiRespon
     @Autowired
     private UserService userService;
 
+    //change
+
     @GetMapping("/page")
     public Header<List<UserApiResponse>> search(
             @PageableDefault(sort="id",direction = Sort.Direction.ASC,size=10)
@@ -41,6 +43,7 @@ public class UserController extends CrudController<UserApiRequest, UserApiRespon
 
     @GetMapping("/genre")
     public List<PostApiResponse> getGenrePost(){
+        int changetest;
         return userService.getGenrePost();
     }
 
